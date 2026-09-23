@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1119">
+  <title>Dust II · Tactical Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1722'/%3E%3Cpath d='M16 5v22M5 16h22' stroke='%23e9bc78' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23e9bc78' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/telemetry.js" defer></script>
+  <script src="/motion.js" defer></script>
+  <script src="/effects.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="/" aria-label="Tactical Lab home"><span class="brand-mark" aria-hidden="true">⌖</span><span>TACTICAL <b>LAB</b></span><span class="brand-divider"></span><span class="header-map">DUST II</span></a>
+    <div class="header-right"><span class="status-dot"></span><span>LOCAL RESEARCH WORKSPACE</span><span class="version">FOUNDATIONS / 01</span></div>
+  </header>
+  <main class="workspace">
+    <aside class="left-panel">
+      <div class="panel-heading"><span class="eyebrow">WORKSPACE</span><span class="tiny-badge">2D</span></div>
+      <h1>Read the round.<br><span>Explore the decision.</span></h1>
+      <p class="intro">Professional match data, a tactical replay, and a reproducible starting point.</p>
+      <div class="section-label">01 <span>DATA SOURCE</span></div>
+      <label for="matchSelect">Match</label>
+      <select id="matchSelect" disabled><option>Loading data catalog…</option></select>
+      <div class="source-meta" id="sourceMeta">Connecting to the local data service.</div>
+      <div class="field-row"><div><label for="roundSelect">Round</label><select id="roundSelect" disabled><option>—</option></select></div><div><label for="viewSelect">Perspective</label><select id="viewSelect"><option value="all">Observer</option><option value="T">T team</option><option value="CT">CT team</option></select></div></div>
+      <div class="perspective-note" id="perspectiveNote"><span class="eye-icon" aria-hidden="true">◎</span><span>Omniscient observer · all positions</span></div>
+      <div class="section-label">02 <span>MAP LAYERS</span></div>
+      <label class="toggle-row" for="trailsToggle"><span>Movement trails</span><input type="checkbox" id="trailsToggle" checked><span class="switch" aria-hidden="true"></span></label>
+      <label class="toggle-row" for="namesToggle"><span>Player names</span><input type="checkbox" id="namesToggle" checked><span class="switch" aria-hidden="true"></span></label>
+      <label class="toggle-row" for="utilitiesToggle"><span>Utility activity</span><input type="checkbox" id="utilitiesToggle" checked><span class="switch" aria-hidden="true"></span></label>
+      <label class="toggle-row" for="shotsToggle"><span>Gunfire direction</span><input type="checkbox" id="shotsToggle" checked><span class="switch" aria-hidden="true"></span></label>
+      <div class="section-label">03 <span>SCENARIO</span></div>
+      <p class="helper">Use the selected frame as a starting point for a repeatable experiment.</p>
+      <button id="sampleBtn" class="button secondary verified-button" hidden disabled><span aria-hidden="true">⌖</span> Load tested post-plant <span aria-hidden="true">→</span></button>
+      <button id="exportBtn" class="button secondary" disabled><span aria-hidden="true">↓</span> Export snapshot <span class="button-tag">JSON</span></button>
+      <button id="branchBtn" class="button primary" disabled><span aria-hidden="true">⑂</span> Branch simulation <span aria-hidden="true">↗</span></button>
+      <button id="returnBtn" class="text-button" hidden>← Return to recording</button>
+      <p class="helper micro" id="branchNote">30 seconds · fixed seed 42<br>Simulated outcomes are approximations.</p>
+      <div class="foundation-note"><span class="note-icon" aria-hidden="true">i</span><div><strong>Foundation, before training</strong><p>Replay and simulation stay labeled separately. No ML policy is running.</p></div></div>
+    </aside>
+    <section class="replay-panel" aria-label="Tactical replay">
+      <div class="replay-heading"><div><div class="eyebrow" id="replayEyebrow">DUST II / TACTICAL REPLAY</div><h2 id="roundTitle">Waiting for match data</h2></div><span id="modeBadge" class="mode-badge">RECORDED DEMO</span></div>
+      <div class="map-stage" id="mapStage">
+        <div class="map-hud"><span class="team-count t-team"><b id="tAlive">—</b> T</span><span class="hud-separator"></span><div class="round-clock"><span id="roundClock">—:—</span><small id="clockLabel">ROUND TIME</small></div><span class="hud-separator"></span><span class="team-count ct-team">CT <b id="ctAlive">—</b></span></div>
+        <canvas id="mapCanvas" aria-label="Top-down map showing player locations, utility activity, and gunfire direction. Player details and utility inventories are also available in the roster." tabindex="0"></canvas>
+        <div id="emptyState" class="empty-state"><div class="empty-symbol" aria-hidden="true">⌖</div><h3>Preparing the tactical view</h3><p>Reading the local match catalog…</p></div>
+        <div class="map-bottom-left"><span class="map-orientation" aria-hidden="true">↑</span><span id="mapStatus">MAP DATA PENDING</span></div>
+        <div class="map-legend"><span><i class="legend-dot t"></i>T</span><span><i class="legend-dot ct"></i>CT</span><span><i class="legend-bomb"></i>Bomb</span></div>
+        <div id="playerTooltip" class="player-tooltip" hidden></div>
+      </div>
+      <div class="telemetry-panel" aria-label="Utility and gunfire legend">
+        <div class="telemetry-legend">
+          <span class="utility-key" data-kind="smoke"><b>S</b> Smoke</span>
+          <span class="utility-key" data-kind="flash"><b>F</b> Flash</span>
+          <span class="utility-key" data-kind="he"><b>HE</b> Frag</span>
+          <span class="utility-key" data-kind="fire"><b>M</b> Fire</span>
+          <span class="utility-key" data-kind="decoy"><b>D</b> Decoy</span>
+          <span class="gunfire-key"><i aria-hidden="true"></i> Firing direction</span>
+        </div>
+        <p class="telemetry-explanation">Recorded utility positions · smoke/fire footprints are illustrative · shot rays show aim direction.</p>
+        <div class="telemetry-meta"><span id="telemetryStatus">Utility &amp; gunfire · awaiting replay</span><span id="telemetryNote">Activity follows the replay timeline.</span></div>
+      </div>
+      <div class="timeline-panel">
+        <div class="timeline-labels"><span id="timeElapsed">00:00.0</span><span id="frameLabel">FRAME — / —</span><span id="timeDuration">00:00.0</span></div>
+        <div class="timeline-track"><input type="range" id="timeline" min="0" max="0" value="0" step="1" aria-label="Replay timeline" disabled><div id="eventTicks" aria-hidden="true"></div></div>
+        <div class="transport-row"><div class="transport-controls"><button id="prevBtn" class="icon-button" title="Previous frame (←)" aria-label="Previous frame" disabled>↤</button><button id="playBtn" class="play-button" title="Play or pause (Space)" aria-label="Play replay" disabled>▶</button><button id="nextBtn" class="icon-button" title="Next frame (→)" aria-label="Next frame" disabled>↦</button><span class="transport-divider"></span><label class="sr-only" for="speedSelect">Playback speed</label><select id="speedSelect" class="speed-select"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></div><span class="keyboard-hint"><kbd>SPACE</kbd> play / pause <span>·</span> <kbd>←</kbd><kbd>→</kbd> step</span></div>
+      </div>
+      <div class="replay-footer"><span id="dataStatus">No data loaded</span><span>Recorded state ≠ engine snapshot</span></div>
+    </section>
+    <aside class="right-panel">
+      <div class="panel-heading"><span class="eyebrow">ON THE SERVER</span><span id="rosterCount" class="muted">0 players</span></div>
+      <div class="team-heading t-team"><span class="team-symbol">T</span><h3>TERRORISTS</h3><span id="tHealth">— HP</span></div>
+      <div id="tRoster" class="roster"><p class="roster-empty">Player data will appear here.</p></div>
+      <div class="team-heading ct-team"><span class="team-symbol">CT</span><h3>COUNTER-TERRORISTS</h3><span id="ctHealth">— HP</span></div>
+      <div id="ctRoster" class="roster"><p class="roster-empty">Player data will appear here.</p></div>
+      <div class="event-heading"><span class="eyebrow">ROUND EVENTS</span><span id="eventCount" class="muted">0</span></div>
+      <div id="eventList" class="event-list"><p class="roster-empty">No events to display.</p></div>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

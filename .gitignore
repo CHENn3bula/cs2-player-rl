@@ -1,0 +1,32 @@
+.venv/
+.venv-decoy/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+vendor/
+data/raw/
+data/processed/
+data/processed-full/
+data/scenarios/
+data/simulations/
+data/assets/
+data/derived/
+reports/*.log
+reports/*.png
+reports/*.json
+reports/*.xml
+*.tmp
+*.tmp.json
+
+# Local credentials and development secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Future training outputs
+checkpoints/
+runs/
+wandb/

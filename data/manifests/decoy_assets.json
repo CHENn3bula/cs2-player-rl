@@ -1,0 +1,32 @@
+{
+  "repository": "https://github.com/HATS-ICT/decoy",
+  "revision": "6f93b8efe5a778384ccd284c31b2141b6b0ce5da",
+  "map_source": "https://drive.google.com/file/d/1P75FvSoT1C_MT1ebG9U8R0dNQcSOQYUT/view",
+  "assets": [
+    {
+      "path": "vendor/decoy/env/assets/de_dust_2.fbx",
+      "bytes": 75692093,
+      "sha256": "967f436a1f2768f9f07f37f530f1d84d5e5e56e4814864e135c7459cce774a48"
+    },
+    {
+      "path": "vendor/decoy/env/assets/de_dust2.png",
+      "bytes": 331527,
+      "sha256": "4ead7f432241d5c06fb91df917f6c77a424bfb032d255854c72019d2230d3483"
+    },
+    {
+      "path": "vendor/decoy/env/assets/WaypointDust2Verified_p3d_clean_verified.json",
+      "bytes": 6780957,
+      "sha256": "4bcd62a4d898e9ff8d125934b81394469e066e73ce45b4a23dab8eb9b1e38dad"
+    },
+    {
+      "path": "vendor/decoy/models/train-di_20250328-183510_y5vpxd/checkpoints/best_model.pth",
+      "bytes": 245218,
+      "sha256": "6b58f2cdb52ae32301a32551f725743cdf41d4c068eee41e5e375909b2ec093f"
+    },
+    {
+      "path": "vendor/decoy/models/train-vae_20250321-040316_upf4hz/checkpoints/best_model.pth",
+      "bytes": 1863170,
+      "sha256": "0bcf5df3e083d3a82e0104dae8bb385bc438f24adaba282409a385ab6aa6ea03"
+    }
+  ]
+}
